@@ -677,7 +677,7 @@ WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
 WETRANSFER_DOWNLOAD_URL = WETRANSFER_API_URL + "/{transfer_id}/download"
 
 def _prepare_session() -> ression:
-    s = rsession()
+    s = ression()
     r = s.get("https://wetransfer.com/")
     m = re_search('name="csrf-token" content="([^"]+)"', r.text)
     s.headers.update(
