@@ -40,7 +40,7 @@ def direct_link_generator(link: str):
         return zippy_share(link)
     elif 'yadi.sk' in link or 'disk.yandex.com' in link:
         return yandex_disk(link)
-    elif 'ouo.io' in link or 'ouo.press' in link
+    elif 'ouo.io' in link or 'ouo.press' in link:
         return ouo(link) 
     elif 'mediafire.com' in link:
         return mediafire(link)
