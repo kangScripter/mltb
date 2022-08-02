@@ -698,8 +698,7 @@ def wetransfer(url: str) -> str:
         transfer_id, security_hash = params
     elif len(params) == 3:
         transfer_id, recipient_id, security_hash = params
-    else:
-        return None
+    
     j = {
         "intent": "entire_transfer",
         "security_hash": security_hash,
@@ -712,5 +711,7 @@ def wetransfer(url: str) -> str:
     try:
         if "direct_link" in j:
             return j["direct_link"]
+        else:
+            return None
     except:
         raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
