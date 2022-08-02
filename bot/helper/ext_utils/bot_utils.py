@@ -242,6 +242,9 @@ def is_gp_link(url: str):
 
 def is_appdrive_link(url: str):
     return "appdrive.in" in url or "driveapp.in" in url
+def is_ouo_link(url: str):
+    return "ouo.io" in url or "ouo.press" in url
+
 def is_mdisk_link(url: str):
     return "mdisk.me" in url
 
