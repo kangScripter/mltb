@@ -63,6 +63,7 @@ class YoutubeDLHelper:
                      'allow_multiple_audio_streams': True,
                      'trim_file_name': 200,
                      'noprogress': True,
+                     'user-agent': 'JioOnDemand/1.5.2.1 (Linux;Android 4.4.2) Jio'
                      'ffmpeg_location': '/bin/new-api'}
 
     @property
