@@ -40,6 +40,8 @@ def direct_link_generator(link: str):
         return zippy_share(link)
     elif 'yadi.sk' in link or 'disk.yandex.com' in link:
         return yandex_disk(link)
+    elif 'ouo.io' in link or 'ouo.press' in link
+        return ouo(link) 
     elif 'mediafire.com' in link:
         return mediafire(link)
     elif 'uptobox.com' in link:
@@ -703,3 +705,19 @@ def wetransfer(url: str) -> str:
             return j["direct_link"]
     except:
         raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
+
+def ouo(url: str) -> str:
+    api = "https://api.emilyx.in/api"
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    resp = client.get(url)
+    if resp.status_code == 404:
+        return "File not found/The link you entered is wrong!"
+    try:
+        resp = client.post(api, json={"type": "ouo", "url": url})
+        res = resp.json()
+    except BaseException:
+        return "API UnResponsive / Invalid Link !"
+    if res["success"] is True:
+        return res["url"]
+    else:
+        return res["msg"]
