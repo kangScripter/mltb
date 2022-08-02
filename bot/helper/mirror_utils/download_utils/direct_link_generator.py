@@ -676,8 +676,8 @@ def dlbypass(url: str) -> str:
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
 WETRANSFER_DOWNLOAD_URL = WETRANSFER_API_URL + "/{transfer_id}/download"
 
-def _prepare_session() -> ression:
-    s = ression()
+def _prepare_session() -> Session:
+    s = Session()
     r = s.get("https://wetransfer.com/")
     m = re_search('name="csrf-token" content="([^"]+)"', r.text)
     s.headers.update(
