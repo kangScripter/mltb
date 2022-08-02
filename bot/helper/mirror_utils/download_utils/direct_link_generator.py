@@ -706,10 +706,5 @@ def wetransfer(url: str) -> str:
     s = _prepare_session()
     r = s.post(WETRANSFER_DOWNLOAD_URL.format(transfer_id=transfer_id), json=j)
     j = r.json()
-    try:
-        if "direct_link" in j:
-            return j["direct_link"]
-        else:
-            return None
-    except:
-        raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
+    return j.get('direct_link')
+    
