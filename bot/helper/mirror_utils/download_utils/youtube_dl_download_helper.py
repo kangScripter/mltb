@@ -20,10 +20,8 @@ class MyLogger:
     def debug(self, msg):
         # Hack to fix changing extension
         if not self.obj.is_playlist:
-            match = re_search(r'.Merger..Merging formats into..(.*?).$', msg) # To mkv
-            if not match:
-                match = re_search(r'.ExtractAudio..Destination..(.*?)$', msg) # To mp3
-            if match:
+            if match := re_search(r'.Merger..Merging formats into..(.*?).$', msg) or \
+                        re_search(r'.ExtractAudio..Destination..(.*?)$', msg):
                 LOGGER.info(msg)
                 newname = match.group(1)
                 newname = newname.rsplit("/", 1)[-1]
@@ -62,7 +60,7 @@ class YoutubeDLHelper:
                      'allow_multiple_video_streams': True,
                      'allow_multiple_audio_streams': True,
                      'trim_file_name': 200,
-                     'noprogress': True, 
+                     'noprogress': True,
                      'ffmpeg_location': '/bin/new-api'}
 
     @property
@@ -142,10 +140,7 @@ class YoutubeDLHelper:
             ext = realName.split('.')[-1]
             if name == "":
                 newname = realName.split(f" [{result['id'].replace('*', '_')}]")
-                if len(newname) > 1:
-                    self.name = newname[0] + '.' + ext
-                else:
-                    self.name = newname[0]
+                self.name = newname[0] + '.' + ext if len(newname) > 1 else newname[0]
             else:
                 self.name = f"{name}.{ext}"
 
@@ -173,11 +168,8 @@ class YoutubeDLHelper:
         if qual.startswith('ba/b'):
             audio_info = qual.split('-')
             qual = audio_info[0]
-            if len(audio_info) == 2:
-                rate = audio_info[1]
-            else:
-                rate = 320
-            self.opts['postprocessors'] = [{'key': 'FFmpegExtractAudio','preferredcodec': 'mp3','preferredquality': f'{rate}'}]
+            rate = audio_info[1] if len(audio_info) == 2 else '320'
+            self.opts['postprocessors'] = [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3', 'preferredquality': rate}]
         self.opts['format'] = qual
         LOGGER.info(f"Downloading with YT-DLP: {link}")
         self.extractMetaData(link, name, args)
