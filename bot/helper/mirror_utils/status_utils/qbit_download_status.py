@@ -47,7 +47,7 @@ class QbDownloadStatus:
     def name(self):
         self.__update()
         if self.__info.state in ["metaDL", "checkingResumeData"]:
-            return self.__info.name + " [METADATA]"
+            return f"[METADATA]{self.__info.name}"
         else:
             return self.__info.name
 
@@ -62,7 +62,7 @@ class QbDownloadStatus:
         if download in ["queuedDL", "queuedUP"]:
             return MirrorStatus.STATUS_WAITING
         elif download in ["pausedDL", "pausedUP"]:
-            return MirrorStatus.STATUS_PAUSE
+            return MirrorStatus.STATUS_PAUSED
         elif download in ["checkingUP", "checkingDL"]:
             return MirrorStatus.STATUS_CHECKING
         elif download in ["stalledUP", "uploading"] and self.__obj.is_seeding:
@@ -70,8 +70,23 @@ class QbDownloadStatus:
         else:
             return MirrorStatus.STATUS_DOWNLOADING
 
-    def torrent_info(self):
-        return self.__info
+    def seeders_num(self):
+        return self.__info.num_seeds
+
+    def leechers_num(self):
+        return self.__info.num_leechs
+
+    def uploaded_bytes(self):
+        return f"{get_readable_file_size(self.__info.uploaded)}"
+
+    def upload_speed(self):
+        return f"{get_readable_file_size(self.__info.upspeed)}/s"
+
+    def ratio(self):
+        return f"{round(self.__info.ratio, 3)}"
+
+    def seeding_time(self):
+        return f"{get_readable_time(self.__info.seeding_time)}"
 
     def download(self):
         return self.__obj
