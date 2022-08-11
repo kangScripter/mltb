@@ -53,12 +53,16 @@ class ZipStatus:
         return MirrorStatus.STATUS_ARCHIVING
 
     def processed_bytes(self):
-        return get_path_size(f"{DOWNLOAD_DIR}{self.__uid}") - self.__size
+        if self.__listener.newDir:
+            return get_path_size(f"{DOWNLOAD_DIR}{self.__uid}10000")
+        else:
+            return get_path_size(f"{DOWNLOAD_DIR}{self.__uid}") - self.__size
 
     def download(self):
         return self
 
     def cancel_download(self):
         LOGGER.info(f'Cancelling Archive: {self.__name}')
-        self.__listener.arch_proc.kill()
+        if self.__listener.suproc is not None:
+            self.__listener.suproc.kill()
         self.__listener.onUploadError('archiving stopped by user!')
