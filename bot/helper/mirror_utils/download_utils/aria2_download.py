@@ -1,4 +1,5 @@
 from time import sleep, time
+from os import remove
 
 from bot import aria2, download_dict_lock, download_dict, STOP_DUPLICATE, BASE_URL, LOGGER
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
@@ -20,14 +21,10 @@ def __onDownloadStarted(api, gid):
                 metamsg = "Downloading Metadata, wait then you can select files. Use torrent file to avoid this wait."
                 meta = sendMessage(metamsg, listener.bot, listener.message)
                 while True:
-                    try:
-                        download = api.get_download(gid)
-                    except:
+                    if download.is_removed or download.followed_by_ids:
                         deleteMessage(listener.bot, meta)
                         break
-                    if download.followed_by_ids:
-                        deleteMessage(listener.bot, meta)
-                        break
+                    download = download.live
         return
     else:
         LOGGER.info(f'onDownloadStarted: {download.name} - Gid: {gid}')
@@ -45,7 +42,7 @@ def __onDownloadStarted(api, gid):
                 LOGGER.info('Checking File/Folder if already in Drive...')
                 sname = download.name
                 if listener.isZip:
-                    sname = sname + ".zip"
+                    sname = f"{sname}.zip"
                 elif listener.extract:
                     try:
                         sname = get_base_name(sname)
@@ -101,12 +98,21 @@ def __onBtDownloadComplete(api, gid):
     if dl := getDownloadByGid(gid):
         listener = dl.listener()
         if listener.select:
+            res = download.files
+            for file_o in res:
+                if not file_o.selected:
+                    try:
+                        remove(file_o.path)
+                    except:
+                        pass
             clean_unwanted(download.dir)
         if listener.seed:
             try:
                 api.set_options({'max-upload-limit': '0'}, [download])
             except Exception as e:
                 LOGGER.error(f'{e} You are not able to seed because you added global option seed-time=0 without adding specific seed_time for this torrent')
+        else:
+            api.client.force_pause(gid)
         listener.onDownloadComplete()
         if listener.seed:
             with download_dict_lock:
