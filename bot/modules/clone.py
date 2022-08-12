@@ -104,11 +104,7 @@ def _clone(message, bot, multi=0):
             if smsg:
                 msg3 = "File/Folder is already available in Drive.\nHere are the search results:"
                 return sendMarkup(msg3, bot, message, button)
-        if CLONE_LIMIT is not None:
-            LOGGER.info('Checking File/Folder Size...')
-            if size > CLONE_LIMIT * 1024**3:
-                msg2 = f'Failed, Clone limit is {CLONE_LIMIT}GB.\nYour File/Folder size is {get_readable_file_size(size)}.'
-                return sendMessage(msg2, bot, message)
+        
         if multi > 1:
             sleep(4)
             nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
