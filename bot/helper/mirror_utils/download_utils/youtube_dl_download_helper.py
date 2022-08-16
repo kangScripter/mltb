@@ -62,7 +62,7 @@ class YoutubeDLHelper:
                      'trim_file_name': 200,
                      'noprogress': True,
                      'allow_unplayable_formats' : True, 
-                     'external_downloader' : True, 
+                     'external_downloader' : aria2c , 
                      'user_agent' : 'JioOnDemand/1.9.1.0 (Linux;Android 4.4.2)', 
                      'ffmpeg_location': '/bin/new-api'}
 
