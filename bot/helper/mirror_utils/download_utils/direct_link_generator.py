@@ -539,54 +539,20 @@ def appdrive_dl(url: str) -> str:
     return info_parsed["gdrive_link"]
 
 def gplinks(url: str):
-
+    api = "https://api.emilyx.in/api"
     client = cloudscraper.create_scraper(allow_brotli=False)
-
-    p = urlparse(url)
-
-    final_url = f'{p.scheme}://{p.netloc}/links/go'
-
-    res = client.head(url)
-
-    header_loc = res.headers['location']
-
-    param = header_loc.split('postid=')[-1]
-
-    req_url = f'{p.scheme}://{p.netloc}/{param}'
-
-    p = urlparse(header_loc)
-
-    ref_url = f'{p.scheme}://{p.netloc}/'
-
-    h = { 'referer': ref_url }
-
-    res = client.get(req_url, headers=h, allow_redirects=False)
-
-    bs4 = BeautifulSoup(res.content, 'html.parser')
-
-    inputs = bs4.find_all('input')
-
-    data = { input.get('name'): input.get('value') for input in inputs }
-
-    h = {
-
-        'referer': ref_url,
-
-        'x-requested-with': 'XMLHttpRequest',
-
-    }
-
-    time.sleep(10)
-
-    res = client.post(final_url, headers=h, data=data)
-
+    resp = client.get(url)
+    if resp.status_code == 404:
+        return "File not found/The link you entered is wrong!"
     try:
-
-        return res.json()['url'].replace('\/','/')
-
-    except: 
-        return 'Something went wrong :('
-    return sendMessage(link, bot, message)
+        resp = client.post(api, json={"type": "gplinks", "url": url})
+        res = resp.json()
+    except BaseException:
+        return "API UnResponsive / Invalid Link !"
+    if res["success"] is True:
+        return res["url"]
+    else:
+        return res["msg"]
 
 def mdisk(url: str) -> str:
 
