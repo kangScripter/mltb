@@ -247,6 +247,9 @@ def is_dl_link(url: str):
 def is_mega_link(url: str):
     return "mega.nz" in url or "mega.co.nz" in url
 
+def is_htp_link(url: str) :
+    return "htpmovies.xyz" in url
+
 def get_mega_link_type(url: str):
     if "folder" in url:
         return "folder"
