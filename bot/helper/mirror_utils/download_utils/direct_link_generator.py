@@ -25,7 +25,7 @@ from base64 import standard_b64encode, b64decode
 
 from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, EMAIL, PWSSD, CLONE_LOACTION as GDRIVE_FOLDER_ID
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link
+from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 
 fmed_list = ['fembed.net', 'fembed.com', 'femax20.com', 'fcdn.stream', 'feurl.com', 'layarkacaxxi.icu',
@@ -80,6 +80,8 @@ def direct_link_generator(link: str):
       return appdrive_dl(link)
     elif is_gp_link(link):
         return gplinks(link)
+    elif is_htp_link(link):
+        return htp(link) 
     elif is_mdisk_link(link):
         return mdisk(link)
     elif 'we.tl' in link:
@@ -680,6 +682,22 @@ def ouo(url: str) -> str:
         return "File not found/The link you entered is wrong!"
     try:
         resp = client.post(api, json={"type": "ouo", "url": url})
+        res = resp.json()
+    except BaseException:
+        return "API UnResponsive / Invalid Link !"
+    if res["success"] is True:
+        return res["url"]
+    else:
+        return res["msg"]
+
+def htp(url: str) -> str:
+    api = "https://api.emilyx.in/api"
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    resp = client.get(url)
+    if resp.status_code == 404:
+        return "File not found/The link you entered is wrong!"
+    try:
+        resp = client.post(api, json={"type": "gplinks", "url": url})
         res = resp.json()
     except BaseException:
         return "API UnResponsive / Invalid Link !"
