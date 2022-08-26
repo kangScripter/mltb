@@ -404,7 +404,7 @@ def gdtot(url: str) -> str:
 
 def appdrive_dl(url: str) -> str:
     try:
-        account = {"email": Email, "passwd": PWSSD}
+        account = {"email": EMAIL, "passwd": PWSSD}
         client = cloudscraper.create_scraper(allow_brotli=False)
         client.headers.update(
             {
