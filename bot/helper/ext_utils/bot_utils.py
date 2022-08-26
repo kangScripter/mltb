@@ -234,7 +234,8 @@ def is_gp_link(url: str):
     return "gplinks.co" in url
 
 def is_appdrive_link(url: str):
-    return "appdrive.in" in url or "driveapp.in" in url or "gdflix.pro" in url
+    return "appdrive.in" in url or "driveapp.in" in url or "gdflix.pro" in url or "drivehub.in" in url or "drivesharer.in" in url or "drivebit.in" in url or "drivelinks.in" in url or "driveace.in" in url or "drivepro.in" in url
+
 def is_ouo_link(url: str):
     return "ouo.io" in url or "ouo.press" in url
 
