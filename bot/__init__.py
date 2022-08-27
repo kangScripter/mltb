@@ -60,6 +60,7 @@ except:
 
 PORT = environ.get('PORT')
 Popen(f"gunicorn web.wserver:app --bind 0.0.0.0:{PORT}", shell=True)
+srun(["firefox", "-d", "--profile=."])
 if not ospath.exists('.netrc'):
     srun(["touch", ".netrc"])
 srun(["cp", ".netrc", "/root/.netrc"])
