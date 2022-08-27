@@ -662,7 +662,7 @@ def ouo(url: str) -> str:
 
 def htp(url: str) -> str:
     download = rget(url, stream=True, allow_redirects=False) 
-       try: 
-              return download.headers["location"]
-       except:
-              return wronglink
+    try: 
+        return download.headers["location"]
+    except:
+            return wronglink
