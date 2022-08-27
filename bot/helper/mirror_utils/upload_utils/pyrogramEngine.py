@@ -5,15 +5,13 @@ from pyrogram.errors import FloodWait, RPCError
 from PIL import Image
 from threading import RLock
 
-from bot import AS_DOCUMENT, AS_DOC_USERS, AS_MEDIA_USERS, CUSTOM_FILENAME, EXTENSION_FILTER, app
-from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, clean_unwanted
+from bot import AS_DOCUMENT, AS_DOC_USERS, AS_MEDIA_USERS, CUSTOM_FILENAME, EXTENSION_FILTER, DUMP_CHAT, app
+from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, clean_unwanted
 from bot.helper.ext_utils.bot_utils import get_readable_file_size
 
 LOGGER = getLogger(__name__)
 getLogger("pyrogram").setLevel(ERROR)
 
-VIDEO_SUFFIXES = ("MKV", "MP4", "MOV", "WMV", "3GP", "MPG", "WEBM", "AVI", "FLV", "M4V", "GIF")
-AUDIO_SUFFIXES = ("MP3", "M4A", "M4B", "FLAC", "WAV", "AIF", "OGG", "AAC", "DTS", "MID", "AMR", "MKA")
 IMAGE_SUFFIXES = ("JPG", "JPX", "PNG", "CR2", "TIF", "BMP", "JXR", "PSD", "ICO", "HEIC", "JPEG")
 
 
@@ -34,8 +32,8 @@ class TgUploader:
         self.__corrupted = 0
         self.__resource_lock = RLock()
         self.__is_corrupted = False
-        self.__sent_msg = app.get_messages(self.__listener.message.chat.id, self.__listener.uid)
         self.__size = size
+        self.__msg_to_reply()
         self.__user_settings()
 
     def upload(self, o_files):
@@ -46,14 +44,21 @@ class TgUploader:
                 if not file_.lower().endswith(tuple(EXTENSION_FILTER)):
                     up_path = ospath.join(dirpath, file_)
                     self.__total_files += 1
-                    if ospath.getsize(up_path) == 0:
-                        LOGGER.error(f"{up_path} size is zero, telegram don't upload zero size files")
-                        self.__corrupted += 1
-                        continue
+                    try:
+                        if ospath.getsize(up_path) == 0:
+                            LOGGER.error(f"{up_path} size is zero, telegram don't upload zero size files")
+                            self.__corrupted += 1
+                            continue
+                    except Exception as e:
+                        if self.__is_cancelled:
+                            return
+                        else:
+                            LOGGER.error(e)
+                            continue
                     self.__upload_file(up_path, file_, dirpath)
                     if self.__is_cancelled:
                         return
-                    if not self.__listener.isPrivate and not self.__is_corrupted:
+                    if (not self.__listener.isPrivate or DUMP_CHAT is not None) and not self.__is_corrupted:
                         self.__msgs_dict[self.__sent_msg.link] = file_
                     self._last_uploaded = 0
                     sleep(1)
@@ -78,12 +83,12 @@ class TgUploader:
         thumb = self.__thumb
         self.__is_corrupted = False
         try:
+            is_video, is_audio = get_media_streams(up_path)
             if not self.__as_doc:
-                duration = 0
-                if file_.upper().endswith(VIDEO_SUFFIXES):
+                if is_video:
                     duration = get_media_info(up_path)[0]
                     if thumb is None:
-                        thumb = take_ss(up_path)
+                        thumb = take_ss(up_path, duration)
                         if self.__is_cancelled:
                             if self.__thumb is None and thumb is not None and ospath.lexists(thumb):
                                 osremove(thumb)
@@ -109,7 +114,7 @@ class TgUploader:
                                                                   supports_streaming=True,
                                                                   disable_notification=True,
                                                                   progress=self.__upload_progress)
-                elif file_.upper().endswith(AUDIO_SUFFIXES):
+                elif is_audio:
                     duration , artist, title = get_media_info(up_path)
                     self.__sent_msg = self.__sent_msg.reply_audio(audio=up_path,
                                                                   quote=True,
@@ -129,8 +134,8 @@ class TgUploader:
                 else:
                     notMedia = True
             if self.__as_doc or notMedia:
-                if file_.upper().endswith(VIDEO_SUFFIXES) and thumb is None:
-                    thumb = take_ss(up_path)
+                if is_video and thumb is None:
+                    thumb = take_ss(up_path, None)
                     if self.__is_cancelled:
                         if self.__thumb is None and thumb is not None and ospath.lexists(thumb):
                             osremove(thumb)
@@ -177,6 +182,16 @@ class TgUploader:
             self.__as_doc = False
         if not ospath.lexists(self.__thumb):
             self.__thumb = None
+
+    def __msg_to_reply(self):
+        if DUMP_CHAT is not None:
+            if self.__listener.isPrivate:
+                msg = self.__listener.message.text
+            else:
+                msg = self.__listener.message.link
+            self.__sent_msg = app.send_message(DUMP_CHAT, msg)
+        else:
+            self.__sent_msg = app.get_messages(self.__listener.message.chat.id, self.__listener.uid)
 
     @property
     def speed(self):
