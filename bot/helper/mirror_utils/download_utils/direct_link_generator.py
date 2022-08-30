@@ -25,7 +25,7 @@ from base64 import standard_b64encode, b64decode
 
 from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, EMAIL, PWSSD, CLONE_LOACTION as GDRIVE_FOLDER_ID
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link
+from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link, is_rock_link
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 
 fmed_list = ['fembed.net', 'fembed.com', 'femax20.com', 'fcdn.stream', 'feurl.com', 'layarkacaxxi.icu',
@@ -88,6 +88,8 @@ def direct_link_generator(link: str):
         return wetransfer(link)
     elif is_dl_link(link):
         return dlbypass(link) 
+    elif is_rock_link(link):
+        return rock(link)
     elif any(x in link for x in fmed_list):
         return fembed(link)
     elif any(x in link for x in ['sbembed.com', 'watchsb.com', 'streamsb.net', 'sbplay.org']):
@@ -666,3 +668,35 @@ def htp(url: str) -> str:
         return download.headers["location"]
     except:
             return wronglink
+
+
+def rock(url: str) -> str:
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    if 'rocklinks.net' in url:
+        DOMAIN = "https://blog.disheye.com"
+    else:
+        DOMAIN = "https://rocklinks.net"
+
+    url = url[:-1] if url[-1] == '/' else url
+
+    code = url.split("/")[-1]
+    if 'rocklinks.net' in url:
+        final_url = f"{DOMAIN}/{code}?quelle=" 
+    else:
+        final_url = f"{DOMAIN}/{code}"
+
+    resp = client.get(final_url)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    
+    try: inputs = soup.find(id="go-link").find_all(name="input")
+    except: return "Incorrect Link"
+    
+    data = { input.get('name'): input.get('value') for input in inputs }
+
+    h = { "x-requested-with": "XMLHttpRequest" }
+    
+    time.sleep(5)
+    r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+    try:
+        return r.json()['url']
+    except: return "Something went wrong :("
