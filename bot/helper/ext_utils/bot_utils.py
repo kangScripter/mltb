@@ -246,7 +246,7 @@ def is_dl_link(url: str):
     return "droplink.co" in url
 
 def is_htp_link(url: str) :
-    return "htpmovies.xyz" in url
+    return "htpmovies.xyz" in url or "toonworld4all.me" in url
 
 
 def is_mega_link(url: str):
