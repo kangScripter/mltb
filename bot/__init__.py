@@ -388,6 +388,12 @@ try:
 except KeyError:
     CLONE_LOACTION = None
 try:
+    KOLOP_CRYPT = getConfig('KOLOP_CRYPT')
+    if len(PWSSD) == 0:
+        raise KeyError
+except KeyError:
+    KOLOP_CRYPT = None
+try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) == 0:
         raise KeyError
