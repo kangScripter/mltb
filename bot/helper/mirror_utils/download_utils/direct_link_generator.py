@@ -90,7 +90,7 @@ def direct_link_generator(link: str):
         return dlbypass(link) 
     elif is_rock_link(link):
         return rock(link)
-    elif hubdrive.me in link:
+    elif 'hubdrive.me' in link:
         return hubdrive(link) 
     elif any(x in link for x in fmed_list):
         return fembed(link)
