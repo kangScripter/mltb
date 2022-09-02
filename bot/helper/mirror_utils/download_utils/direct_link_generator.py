@@ -704,7 +704,7 @@ def rock(url: str) -> str:
     except: return "Something went wrong :("
 
 SHARER_EMAIL = "johnwick.mirror.leech@gmail.com"
-SHARER_PASS = "Johnwick.9581"
+SHARER_PASS = "password"
 def hubdrive(url: str) -> str:
     """ Hubdrive google drive link generator
     By https://github.com/xcscxr """
