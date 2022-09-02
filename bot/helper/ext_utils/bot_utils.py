@@ -251,6 +251,9 @@ def is_htp_link(url: str) :
 def is_rock_link(url: str) :
     return "rocklinks.net" in url
 
+def is_kolop_link(url: str) :
+    return "kolop.icu" in url
+
 
 def is_mega_link(url: str):
     return "mega.nz" in url or "mega.co.nz" in url
