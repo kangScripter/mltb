@@ -90,6 +90,8 @@ def direct_link_generator(link: str):
         return dlbypass(link) 
     elif is_rock_link(link):
         return rock(link)
+    elif hubdrive.me in link:
+        return hubdrive(link) 
     elif any(x in link for x in fmed_list):
         return fembed(link)
     elif any(x in link for x in ['sbembed.com', 'watchsb.com', 'streamsb.net', 'sbplay.org']):
@@ -700,3 +702,26 @@ def rock(url: str) -> str:
     try:
         return r.json()['url']
     except: return "Something went wrong :("
+
+SHARER_EMAIL = johnwick.mirror.leech@gmail.com
+SHARER_PASS = Johnwick.9581
+def hubdrive(url: str) -> str:
+    """ Hubdrive google drive link generator
+    By https://github.com/xcscxr """
+    if not SHARER_EMAIL:
+        raise DirectDownloadLinkException("ERROR: SHARER_EMAIL not provided")
+    temp = urlparse(url)
+    client = rsession()
+    client.post(f'{temp.scheme}://{temp.netloc}/sign', data={'email': SHARER_EMAIL, 'pass': SHARER_PASS})
+    try:
+        client.cookies.get_dict()['crypt']
+    except:
+        raise DirectDownloadLinkException("ERROR: invalid SHARER_EMAIL")
+    try:
+        res = client.get(url)
+        req_url = f"{temp.scheme}://{temp.netloc}/ajax.php?ajax=download"
+        res = client.post(req_url, headers={'x-requested-with': 'XMLHttpRequest'}, data={'id': url.split('/')[-1]}).json()['file']
+        client.get(f'{temp.scheme}://{temp.netloc}/login.php?action=logout')
+        return f'https://drive.google.com/open?id={res.split("gd=")[-1]}'
+    except:
+        return "Something went wrong :("
