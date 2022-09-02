@@ -705,16 +705,14 @@ def rock(url: str) -> str:
         return r.json()['url']
     except: return "Something went wrong :("
 
-SHARER_EMAIL = "johnwick.mirror.leech@gmail.com"
-SHARER_PASS = "password"
 def hubdrive(url: str) -> str:
     """ Hubdrive google drive link generator
     By https://github.com/xcscxr """
-    if not SHARER_EMAIL:
+    if not EMAIL:
         raise DirectDownloadLinkException("ERROR: SHARER_EMAIL not provided")
     temp = urlparse(url)
     client = rsession()
-    client.post(f'{temp.scheme}://{temp.netloc}/sign', data={'email': SHARER_EMAIL, 'pass': SHARER_PASS})
+    client.post(f'{temp.scheme}://{temp.netloc}/sign', data={'email': EMAIL, 'pass': PWSSD})
     try:
         client.cookies.get_dict()['crypt']
     except:
