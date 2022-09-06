@@ -709,7 +709,7 @@ def hubdrive(url: str) -> str:
     """ Hubdrive google drive link generator
     By https://github.com/xcscxr """
     if not EMAIL:
-        raise DirectDownloadLinkException("ERROR: SHARER_EMAIL not provided")
+        raise DirectDownloadLinkException("ERROR: EMAIL not provided")
     temp = urlparse(url)
     client = rsession()
     client.post(f'{temp.scheme}://{temp.netloc}/sign', data={'email': EMAIL, 'pass': PWSSD})
@@ -736,6 +736,8 @@ def parse_info(res):
     return info_parsed
 
 def kolop_dl(url):
+    if not KOLOP_CRYPT:
+        raise DirectDownloadLinkException("ERROR: KOLOP_CRYPT not provided")
     client = requests.Session()
     client.cookies.update({'crypt': KOLOP_CRYPT})
     
