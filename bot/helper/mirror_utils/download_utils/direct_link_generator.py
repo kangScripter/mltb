@@ -25,7 +25,7 @@ from base64 import standard_b64encode, b64decode
 
 from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, EMAIL, PWSSD, CLONE_LOACTION as GDRIVE_FOLDER_ID, KOLOP_CRYPT
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link, is_rock_link, is_kolop_link
+from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link, is_rock_link, is_kolop_link, is_gt_link
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 
 fmed_list = ['fembed.net', 'fembed.com', 'femax20.com', 'fcdn.stream', 'feurl.com', 'layarkacaxxi.icu',
@@ -94,6 +94,8 @@ def direct_link_generator(link: str):
         return hubdrive(link) 
     elif is_kolop_link in link:
         return kolop_dl(link) 
+    elif is_gt_link(link):
+        return gt(link) 
     elif any(x in link for x in fmed_list):
         return fembed(link)
     elif any(x in link for x in ['sbembed.com', 'watchsb.com', 'streamsb.net', 'sbplay.org']):
@@ -766,3 +768,28 @@ def kolop_dl(url):
     info_parsed['src_url'] = url
 
     return info_parsed['gdrive_url']
+
+def gt(url):
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    DOMAIN = "https://go.bloggertheme.xyz"
+    url = url[:-1] if url[-1] == '/' else url
+
+    code = url.split("/")[-1]
+    final_url = f"{DOMAIN}/{code}?quelle="
+
+    resp = client.get(final_url)
+    
+    soup = BeautifulSoup(resp.content, "html.parser")
+    try:
+        inputs = soup.find(id="go-link").find_all(name="input")
+    except:
+        return "Incorrect Link"
+    data = { input.get('name'): input.get('value') for input in inputs }
+
+    h = { "x-requested-with": "XMLHttpRequest" }
+    
+    time.sleep(6)
+    r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+    try:
+        return r.json()['url']
+    except: return "Something went wrong :("
