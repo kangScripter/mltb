@@ -516,7 +516,7 @@ def appdrive_dl(url: str) -> str:
             return "Faced an Unknown Error!"
         return info_parsed["gdrive_link"]
     except BaseException:
-        return "Unable to Extract GDrive Link"
+        raise DirectDownloadLinkException("ERROR: Try in your broswer, mostly file not found or user limit exceeded!")
 
 def gplinks(url: str):
     api = "https://api.emilyx.in/api"
@@ -760,7 +760,8 @@ def kolop_dl(url):
     
     try:
         res = client.post(req_url, headers=headers, data=data).json()['file']
-    except: return {'error': True, 'src_url': url}
+    except:
+        raise DirectDownloadLinkException("ERROR: drive full ayindi personal drive lo konni delete chey ra")
     
     gd_id = re.findall('gd=(.*)', res, re.DOTALL)[0]
     
