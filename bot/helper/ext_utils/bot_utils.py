@@ -258,7 +258,7 @@ def is_gt_link(url: str) :
     return "gtlinks.me" in url
 
 def is_psm_link(url: str) :
-    return "psm.pm" in url
+    return "psa.pm" in url
 
 
 def is_mega_link(url: str):
