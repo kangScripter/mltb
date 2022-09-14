@@ -74,6 +74,8 @@ def direct_link_generator(link: str):
         return solidfiles(link)
     elif 'krakenfiles.com' in link:
         return krakenfiles(link)
+    elif 'upload.ee' in link:
+        return uploadee(link)
     elif is_gdtot_link(link):
         return gdtot(link)
     elif is_appdrive_link(link):
@@ -405,6 +407,16 @@ def krakenfiles(page_link: str) -> str:
     else:
         raise DirectDownloadLinkException(
             f"Failed to acquire download URL from kraken for : {page_link}")
+
+def uploadee(url: str) -> str:
+    """ uploadee direct link generator
+    By https://github.com/iron-heart-x"""
+    try:
+        soup = BeautifulSoup(rget(url).content, 'lxml')
+        sa = soup.find('a', attrs={'id':'d_l'})
+        return sa['href']
+    except:
+        raise DirectDownloadLinkException(f"ERROR: Failed to acquire download URL from upload.ee for : {url}")
 
 def gdtot(url: str) -> str:
     """ Gdtot google drive link generator
