@@ -800,7 +800,7 @@ def gt(url):
 
 def psm(url):
 	client = cloudscraper.create_scraper(allow_brotli=False)
-	r = client.get(psa_url)
+	r = client.get(url)
 	soup = BeautifulSoup(r.text, "html.parser").find_all(class_="dropshadowboxes-drop-shadow dropshadowboxes-rounded-corners dropshadowboxes-inside-and-outside-shadow dropshadowboxes-lifted-both dropshadowboxes-effect-default")
 	
 	with concurrent.futures.ThreadPoolExecutor() as executor:
