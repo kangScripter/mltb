@@ -11,6 +11,7 @@ import requests
 import re
 import time
 import cloudscraper
+import concurrent.futures
 from cfscrape import create_scraper
 from lxml import etree
 from requests import get as rget, head as rhead, post as rpost, Session as rsession
