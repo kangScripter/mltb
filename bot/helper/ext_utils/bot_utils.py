@@ -257,6 +257,9 @@ def is_kolop_link(url: str) :
 def is_gt_link(url: str) :
     return "gtlinks.me" in url
 
+def is_psm_link(url: str) :
+    return "psm.pm" in url
+
 
 def is_mega_link(url: str):
     return "mega.nz" in url or "mega.co.nz" in url
