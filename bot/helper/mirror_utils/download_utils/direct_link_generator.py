@@ -827,5 +827,5 @@ def psm(url):
                  'x-requested-with': 'XMLHttpRequest',
           }, data=data
        )
-       out = res.json()['url'].replace('\/','/')
+       out = res.json()
        return out
