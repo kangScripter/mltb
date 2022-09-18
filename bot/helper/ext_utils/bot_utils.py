@@ -249,7 +249,7 @@ def is_htp_link(url: str) :
     return "htpmovies.xyz" in url or "toonworld4all.me" in url
 
 def is_rock_link(url: str) :
-    return "rocklinks.net" in url
+    return "rocklinks.net" in url or "shortingly.me" in url
 
 def is_kolop_link(url: str) :
     return "kolop.icu" in url
