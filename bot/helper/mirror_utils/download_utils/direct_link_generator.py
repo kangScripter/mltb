@@ -709,7 +709,7 @@ def rock(url: str) -> str:
     if 'rocklinks.net' in url:
         DOMAIN = "https://blog.disheye.com"
     else:
-        DOMAIN = "https://rocklinks.net"
+        DOMAIN = "https://go.techyjeeshan.xyz"
 
     url = url[:-1] if url[-1] == '/' else url
 
@@ -717,7 +717,7 @@ def rock(url: str) -> str:
     if 'rocklinks.net' in url:
         final_url = f"{DOMAIN}/{code}?quelle=" 
     else:
-        final_url = f"{DOMAIN}/{code}"
+        final_url = f"{DOMAIN}/{code}?quelle="
 
     resp = client.get(final_url)
     soup = BeautifulSoup(resp.content, "html.parser")
