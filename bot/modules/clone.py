@@ -196,7 +196,7 @@ def _clone(message, bot):
             sendMarkup(result + cc, bot, message, button)
             LOGGER.info(f'Cloning Done: {name}')
     else:
-        sendMessage("Send Gdrive link along with command or by replying to the link by command\n\n<b>Multi links only by replying to first link/file:</b>\n<code>/cmd</code> 10(number of links/files)", bot, message)
+        sendMessage("Again clone the above link or invalid link", bot, message)
 
 @new_thread
 def cloneNode(update, context):
