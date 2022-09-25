@@ -53,7 +53,7 @@ def _xp(message, bot):
         nextmsg = sendMessage(" ".join(cmsg), bot, nextmsg)
         nextmsg.from_user.id = message.from_user.id
         sleep(4)
-        Thread(target=_clone, args=(nextmsg, bot)).start()
+        Thread(target=_xp, args=(nextmsg, bot)).start()
     else:
         sendMessage("give any link ", bot, message)
         
