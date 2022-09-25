@@ -32,6 +32,6 @@ def xplink(update, context):
      LOGGER.info(f"Generated link: {xpurl}")
      return sendMessage(reply, context.bot, update.message)
 
-XP_HANDLER = CommandHandler(BotCommands.XpCommand, xplink, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
+xp_handler = CommandHandler(BotCommands.XpCommand, xplink, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
 
-dispatcher.add_handler(XP_HANDLER)
+dispatcher.add_handler(xp_handler)
