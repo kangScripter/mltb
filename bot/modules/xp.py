@@ -3,6 +3,7 @@ import requests
 from subprocess import run
 from telegram import ParseMode
 import cloudscraper
+from threading import Thread
 from bs4 import BeautifulSoup
 from telegram.ext import CommandHandler
 from urllib.parse import urlparse
