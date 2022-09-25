@@ -41,13 +41,14 @@ def _xp(message, bot):
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
         msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
-        deleteMessage(bot, msg)
         cget = create_scraper().get
         xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
         reply = f"<b>xpshort-Jack</b>:<code>{xpurl}</code>\n"
         LOGGER.info(f"Generated link: {xpurl}")
         return sendMessage(reply, bot, message)
-        if multi > 1:
+    else:
+        sendMessage("give any link ", bot, message)
+   if multi > 1:
              sleep(4)
              nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
              msg = message.text.split(maxsplit=mi+1)
@@ -55,9 +56,7 @@ def _xp(message, bot):
              nextmsg = sendMessage(" ".join(msg), bot, nextmsg)
              nextmsg.from_user.id = message.from_user.id
              sleep(4)
-             Thread(target= -xp, args=(bot, nextmsg, _xp)).start()
-    else:
-        sendMessage("give any link ", bot, message)
+             Thread(target= _xp, args=(bot, nextmsg)).start()
         
 @new_thread
 def xplink(update, context):
