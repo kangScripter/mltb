@@ -51,5 +51,6 @@ class _BotCommands:
         self.RssUnSubCommand = (f'rssunsub{CMD_INDEX}', f'rus{CMD_INDEX}')
         self.RssSettingsCommand = (f'rssset{CMD_INDEX}', f'rst{CMD_INDEX}')
         self.SleepCommand = f'sleep{CMD_INDEX}'
+        self.XpCommand = f'xp{CMD_INDEX}'
 
 BotCommands = _BotCommands()
