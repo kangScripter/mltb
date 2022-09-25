@@ -17,7 +17,7 @@ from cfscrape import create_scraper
 SHORTENER = "urlshortx.com"
 SHORTENER_API = "8fabf1c36bcaf7fb959b360ac8574f39815ae901"
 
-def gplink(update, context):
+def xplink(update, context):
      args = update.message.text.split(" ", maxsplit=1)
      reply_to = update.message.reply_to_message
      if len(args) > 1:
