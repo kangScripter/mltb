@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from telegram.ext import CommandHandler
 from urllib.parse import urlparse
 from telegram import message
-from bot.helper.ext_utils.bot_utils import is_gdrive_link, new_thread,
+from bot.helper.ext_utils.bot_utils import is_gdrive_link, new_thread
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot import LOGGER, dispatcher, bot
 from bot.helper.telegram_helper.filters import CustomFilters
