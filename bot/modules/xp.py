@@ -31,7 +31,7 @@ def _xp(message, bot):
      xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
      reply = f"*xpshort-Jack*\n<code>{xpurl}</code>\n"
      LOGGER.info(f"Generated link: {xpurl}")
-     return sendMessage(reply, context.bot, update.message)
+     return sendMessage(reply, bot, message)
 
 
 def xplink(update, context):
