@@ -42,7 +42,7 @@ def _xp(message, bot):
     msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
     cget = create_scraper().get
     xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
-    reply = f"<b>xpshort-Jack</b>\n<code>{xpurl}</code>\n"
+    reply = f"<b>xpshort-Jack</b>\n:<code>{xpurl}</code>\n"
     LOGGER.info(f"Generated link: {xpurl}")
     return sendMessage(reply, bot, message)
 
