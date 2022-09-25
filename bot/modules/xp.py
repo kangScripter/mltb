@@ -39,13 +39,14 @@ def _xp(message, bot):
             tag = f"@{reply_to.from_user.username}"
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
-    msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
-    cget = create_scraper().get
-    xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
-    reply = f"<b>xpshort-Jack</b>\n:<code>{xpurl}</code>\n"
-    LOGGER.info(f"Generated link: {xpurl}")
-    return sendMessage(reply, bot, message)
-
+        msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
+        cget = create_scraper().get
+        xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
+        reply = f"<b>xpshort-Jack</b>\n:<code>{xpurl}</code>\n"
+        LOGGER.info(f"Generated link: {xpurl}")
+        return sendMessage(reply, bot, message)
+     else:
+        sendMessage("Again clone the above link or invalid link", bot, message)
 
 def xplink(update, context):
     _xp(update.message, context.bot)
