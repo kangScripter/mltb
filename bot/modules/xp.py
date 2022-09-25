@@ -46,7 +46,7 @@ def _xp(message, bot):
     LOGGER.info(f"Generated link: {xpurl}")
     return sendMessage(reply, bot, message)
 
-
+@new_thread
 def xplink(update, context):
     _xp(update.message, context.bot)
 
