@@ -26,14 +26,11 @@ def xplink(message, bot):
           link = reply_to.text
      else:
           link = ''
-     if :
-          cget = create_scraper().get
-          xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
-          reply = f"*xpshort-Jack*\n<code>{xpurl}</code>\n"
-          LOGGER.info(f"Generated link: {xpurl}")
-          return sendMessage(reply, context.bot, update.message)
-     else:
-          return sendMessage(reply, context.bot, update.message)
+     cget = create_scraper().get
+     xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
+     reply = f"*xpshort-Jack*\n<code>{xpurl}</code>\n"
+     LOGGER.info(f"Generated link: {xpurl}")
+     return sendMessage(reply, context.bot, update.message)
 
 @new_thread
 def xplink(update, context):
