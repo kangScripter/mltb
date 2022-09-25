@@ -13,7 +13,7 @@ from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot import dispatcher, LOGGER, STOP_DUPLICATE, download_dict, download_dict_lock, Interval
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot.helper.telegram_helper.message_utils import sendMessage
+from bot.helper.telegram_helper.message_utils import sendMessage, deleteMessage, delete_all_messages, update_all_messages, sendStatusMessage, sendFile, sendMarkup
 from cfscrape import create_scraper
 
 SHORTENER = "urlshortx.com"
