@@ -48,7 +48,7 @@ def _xp(message, bot):
         LOGGER.info(f"Generated link: {xpurl}")
         return sendMessage(reply, bot, message)
     else:
-        sendMessage("Again clone the above link or invalid link", bot, message)
+        sendMessage("give any link ", bot, message)
     if multi > 1:
         sleep(4)
         nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
@@ -57,7 +57,7 @@ def _xp(message, bot):
         nextmsg = sendMessage(" ".join(msg), bot, nextmsg)
         nextmsg.from_user.id = message.from_user.id
         sleep(4)
-        Thread(target=_xp, args=(bot, nextmsg)).start()
+        Thread(target=_xp, args=(bot, nextmsg, _xp)).start()
         
 @new_thread
 def xplink(update, context):
