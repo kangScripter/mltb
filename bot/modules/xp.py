@@ -45,7 +45,7 @@ def _xp(message, bot):
         reply = f"<b>xpshort-Jack</b>\n:<code>{xpurl}</code>\n"
         LOGGER.info(f"Generated link: {xpurl}")
         return sendMessage(reply, bot, message)
-     else:
+    else:
         sendMessage("Again clone the above link or invalid link", bot, message)
 
 def xplink(update, context):
