@@ -17,7 +17,7 @@ from cfscrape import create_scraper
 SHORTENER = "urlshortx.com"
 SHORTENER_API = "8fabf1c36bcaf7fb959b360ac8574f39815ae901"
 
-def xplink(update, context):
+def xplink(message, bot):
      args = update.message.text.split(" ", maxsplit=1)
      reply_to = update.message.reply_to_message
      if len(args) > 1:
@@ -26,12 +26,18 @@ def xplink(update, context):
           link = reply_to.text
      else:
           link = ''
-     cget = create_scraper().get
-     xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
-     reply = f"*xpshort-Jack*\n<code>{xpurl}</code>\n"
-     LOGGER.info(f"Generated link: {xpurl}")
-     return sendMessage(reply, context.bot, update.message)
+     if :
+          cget = create_scraper().get
+          xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
+          reply = f"*xpshort-Jack*\n<code>{xpurl}</code>\n"
+          LOGGER.info(f"Generated link: {xpurl}")
+          return sendMessage(reply, context.bot, update.message)
+     else:
+          return sendMessage(reply, context.bot, update.message)
+
+@new_thread
+def xplink(update, context):
+    _xp(update.message, context.bot)
 
 xp_handler = CommandHandler(BotCommands.XpCommand, xplink, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
-
 dispatcher.add_handler(xp_handler)
