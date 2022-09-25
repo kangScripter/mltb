@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 from telegram import message
 from bot.helper.ext_utils.bot_utils import is_gdrive_link, new_thread
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot import LOGGER, dispatcher, bot
+from bot import dispatcher, LOGGER, STOP_DUPLICATE, download_dict, download_dict_lock, Interval
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import sendMessage
@@ -41,9 +41,10 @@ def _xp(message, bot):
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
         msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
+        deleteMessage(bot, msg)
         cget = create_scraper().get
         xpurl = cget(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
-        reply = f"<b>xpshort-Jack</b>\n:<code>{xpurl}</code>\n"
+        reply = f"<b>xpshort-Jack</b>:<code>{xpurl}</code>\n"
         LOGGER.info(f"Generated link: {xpurl}")
         return sendMessage(reply, bot, message)
     else:
