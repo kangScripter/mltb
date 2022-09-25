@@ -57,7 +57,7 @@ def _xp(message, bot):
         nextmsg = sendMessage(" ".join(msg), bot, nextmsg)
         nextmsg.from_user.id = message.from_user.id
         sleep(4)
-        Thread(target=_mirror_leech, args=(bot, nextmsg, isZip, extract, isQbit, isLeech)).start()
+        Thread(target=_xp, args=(bot, nextmsg)).start()
         
 @new_thread
 def xplink(update, context):
