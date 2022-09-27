@@ -638,7 +638,7 @@ def dlbypass(url: str) -> str:
         }
         p = urlparse(url)
         final_url = f"{p.scheme}://{p.netloc}/links/go"
-        sleep(3.1)
+        time.sleep(3.1)
         res = client.post(final_url, data=data, headers=h).json()
         return res["url"]
         
