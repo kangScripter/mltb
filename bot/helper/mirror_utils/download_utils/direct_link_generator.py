@@ -624,7 +624,7 @@ def mdis_k(urlx):
        return sendMessage(link, bot, message)
 
 def dlbypass(url: str) -> str:
-        client = cloudscraper.create_scraper(allow_brotli=False)
+        client = rsession()
         res = client.get(url, timeout=5)
         ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
         h = {"referer": ref}
