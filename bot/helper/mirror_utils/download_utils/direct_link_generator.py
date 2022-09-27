@@ -641,12 +641,12 @@ def dlbypass(url: str) -> str:
         final_url = f"{p.scheme}://{p.netloc}/links/go"
         sleep(3.1)
         res = client.post(final_url, data=data, headers=h).json()
-        if res["status"] == "success":
-            return res["url"]
-        return None
-    except Exception as e:
-        print(e)
-        return None
+        
+        return res["url"]
+        
+    except:
+        raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
+
     
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
