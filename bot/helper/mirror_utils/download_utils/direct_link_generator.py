@@ -639,10 +639,9 @@ def dlbypass(url: str) -> str:
         p = urlparse(url)
         final_url = f"{p.scheme}://{p.netloc}/links/go"
         time.sleep(3.1)
-        res = client.post(final_url, data=data, headers=h).json()
-        return res["url"]
-        
-    
+        res = client.post(final_url, data=data, headers=h)
+        return res.json()['url']
+       
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
 WETRANSFER_DOWNLOAD_URL = WETRANSFER_API_URL + "/{transfer_id}/download"
