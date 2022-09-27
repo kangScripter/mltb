@@ -624,21 +624,30 @@ def mdis_k(urlx):
        return sendMessage(link, bot, message)
 
 def dlbypass(url: str) -> str:
-    api = "https://api.emilyx.in/api"
-    client = cloudscraper.create_scraper(allow_brotli=False)
-    resp = client.get(url)
-    if resp.status_code == 404:
-        return "File not found/The link you entered is wrong!"
     try:
-        resp = client.post(api, json={"type": "droplink", "url": url})
-        res = resp.json()
-    except BaseException:
-        return "API UnResponsive / Invalid Link !"
-    if res["success"] is True:
-        return res["url"]
-    else:
-        return res["msg"]
-
+        client = requests.Session()
+        res = client.get(url, timeout=5)
+        ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
+        h = {"referer": ref}
+        res = client.get(url, headers=h)
+        bs4 = BeautifulSoup(res.content, "html.parser")
+        inputs = bs4.find_all("input")
+        data = {input.get("name"): input.get("value") for input in inputs}
+        h = {
+            "content-type": "application/x-www-form-urlencoded",
+            "x-requested-with": "XMLHttpRequest",
+        }
+        p = urlparse(url)
+        final_url = f"{p.scheme}://{p.netloc}/links/go"
+        sleep(3.1)
+        res = client.post(final_url, data=data, headers=h).json()
+        if res["status"] == "success":
+            return res["url"]
+        return None
+    except Exception as e:
+        print(e)
+        return None
+    
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
 WETRANSFER_DOWNLOAD_URL = WETRANSFER_API_URL + "/{transfer_id}/download"
