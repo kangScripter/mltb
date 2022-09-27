@@ -624,7 +624,6 @@ def mdis_k(urlx):
        return sendMessage(link, bot, message)
 
 def dlbypass(url: str) -> str:
-    try:
         client = requests.Session()
         res = client.get(url, timeout=5)
         ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
@@ -641,12 +640,8 @@ def dlbypass(url: str) -> str:
         final_url = f"{p.scheme}://{p.netloc}/links/go"
         sleep(3.1)
         res = client.post(final_url, data=data, headers=h).json()
-        
         return res["url"]
         
-    except:
-        raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
-
     
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
@@ -685,9 +680,9 @@ def wetransfer(url: str) -> str:
     j = r.json()
     try:
         if "direct_link" in j:
-            return j["direct_link"]
+            return j["direct_link"]    
     except:
-        raise DirectDownloadLinkException("ERROR: Error while trying to generate Direct Link from WeTransfer!")
+        raise DirectDownloadLinkException("ERROR: Error while trying bypass!")
 
 def ouo(url: str) -> str:
     api = "https://api.emilyx.in/api"
