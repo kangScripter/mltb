@@ -639,7 +639,7 @@ def mdis_k(urlx):
        return sendMessage(link, bot, message)
 
 def dlbypass(url: str) -> str:
-        client = rsession()
+        client = create_scraper()
         p = urlparse(url)
         final_url = f'{p.scheme}://{p.netloc}/links/go'
 
