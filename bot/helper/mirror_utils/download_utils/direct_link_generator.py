@@ -639,35 +639,35 @@ def mdis_k(urlx):
        return sendMessage(link, bot, message)
 
 def dlbypass(url: str) -> str:
-        client = cloudscraper.create_scraper(allow_brotli=False)
-        p = urlparse(url)
-        final_url = f'{p.scheme}://{p.netloc}/links/go'
+    client = requests.Session()
+    p = urlparse(url)
+    final_url = f'{p.scheme}://{p.netloc}/links/go'
 
-        res = client.get(url)
-     
-        url = url[:-1] if url[-1] == '/' else url
+    res = client.get(url)
+    
+    url = url[:-1] if url[-1] == '/' else url
 
-        param = url.split("/")[-1]
-        req_url = f'{p.scheme}://{p.netloc}/{param}'
-        p = urlparse(req_url)
-        ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
+    param = url.split("/")[-1]
+    req_url = f'{p.scheme}://{p.netloc}/{param}'
+    p = urlparse(req_url)
+    ref = re.findall("action[ ]{0,}=[ ]{0,}['|\"](.*?)['|\"]", res.text)[0]
 
-        h = { 'referer': ref }
-        res = client.get(req_url, headers=h, allow_redirects=False)
+    h = { 'referer': ref }
+    res = client.get(req_url, headers=h, allow_redirects=False)
     
-        bs4 = BeautifulSoup(res.content, 'html.parser')
-        inputs = bs4.find_all('input')
-        data = { input.get('name'): input.get('value') for input in inputs }
+    bs4 = BeautifulSoup(res.content, 'html.parser')
+    inputs = bs4.find_all('input')
+    data = { input.get('name'): input.get('value') for input in inputs }
 
-        h = {
-             'referer': ref,
-             'x-requested-with': 'XMLHttpRequest',
-        }
-        time.sleep(10)
-        res = client.post(final_url, headers=h, data=data)
-        try:
-            return res.json()['url'].replace('\/','/')
-        except: return 'Something went wrong :('
+    h = {
+        'referer': ref,
+        'x-requested-with': 'XMLHttpRequest',
+    }
+    time.sleep(10)
+    res = client.post(final_url, headers=h, data=data)
+    try:
+        return res.json()['url'].replace('\/','/')
+    except: return 'Something went wrong :('
        
 
 WETRANSFER_API_URL = "https://wetransfer.com/api/v4/transfers"
