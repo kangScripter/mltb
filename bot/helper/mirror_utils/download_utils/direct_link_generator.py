@@ -799,7 +799,7 @@ def kolop_dl(url):
 
 def gt(url):
     client = cloudscraper.create_scraper(allow_brotli=False)
-    DOMAIN = "https://go.gyanitheme.com"
+    DOMAIN = "https://go.kinemaster.cc"
     url = url[:-1] if url[-1] == '/' else url
 
     code = url.split("/")[-1]
