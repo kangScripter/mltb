@@ -696,7 +696,8 @@ def ouo(url: str) -> str:
         return res["msg"]
 
 def htp(url: str) -> str:
-    download = rget(url, stream=True, allow_redirects=False) 
+    yurl = url.replace("htpmovies.art/exit", "htpmovies.art/go")
+    download = rget(yurl, stream=True, allow_redirects=False) 
     try: 
         return download.headers["location"]
     except:
