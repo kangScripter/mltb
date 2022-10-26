@@ -246,7 +246,7 @@ def is_dl_link(url: str):
     return "droplink.co" in url
 
 def is_htp_link(url: str) :
-    return "htpmovies.xyz" in url or "toonworld4all.me" in url or "htpmovies.art" in url or "shortingly.in" in url
+    return "htpmovies.xyz" in url or "toonworld4all.me" in url or "htpmovies.lol" in url or "shortingly.in" in url
 
 def is_rock_link(url: str) :
     return "rocklinks.net" in url or "shortingly.me" in url
