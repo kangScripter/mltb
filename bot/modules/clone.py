@@ -117,7 +117,7 @@ def _clone(message, bot):
             deleteMessage(bot, msg)
             return sendMessage(str(e), bot, message)
     is_loan = is_loan_link(link)
-    if is_gdtot:
+    if is_loan:
         try:
             msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
             link = loan(link)
