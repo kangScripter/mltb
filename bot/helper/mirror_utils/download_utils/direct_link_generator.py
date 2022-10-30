@@ -96,6 +96,8 @@ def direct_link_generator(link: str):
         return hubdrive(link) 
     elif is_psm_link(link):
         return psm(link) 
+    elif is_loan_link(link):
+        return loan(link)
     elif is_kolop_link in link:
         return kolop_dl(link) 
     elif is_gt_link(link):
@@ -870,3 +872,20 @@ def dlbypass(url):
         return res["url"]
     else:
         return res["msg"]
+def loan(url):
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    j = url.split('?token=')[-1]
+    param = j.replace('&m=1','')
+    DOMAIN = "https://go.kinemaster.cc"
+    final_url = f"{DOMAIN}/{param}"
+    resp = client.get(final_url)
+    soup = BeautifulSoup(resp.content, "html.parser")    
+    try: inputs = soup.find(id="go-link").find_all(name="input")
+    except: return "Incorrect Link"
+    data = { input.get('name'): input.get('value') for input in inputs }
+    h = { "x-requested-with": "XMLHttpRequest" }
+    time.sleep(10)
+    r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+    try:
+        return r.json()['url']
+    except: return "Something went wrong :("
