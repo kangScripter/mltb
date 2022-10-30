@@ -242,6 +242,9 @@ def is_ouo_link(url: str):
 def is_mdisk_link(url: str):
     return "mdisk.me" in url
 
+def is_loan_link(url: str):
+    return "loan.kinemaster.cc" in url
+
 def is_dl_link(url: str):
     return "droplink.co" in url
 
