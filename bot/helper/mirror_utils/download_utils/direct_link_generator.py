@@ -698,11 +698,13 @@ def ouo(url: str) -> str:
         return res["msg"]
 
 def htp(url: str) -> str:
-    download = rget(url, stream=True, allow_redirects=False) 
+    if url.startswith("https://htpmovies.lol/"):
+        r = rhead(url, allow_redirects=True)
+        url = r.url 
     try: 
-        return download.headers["location"]
+        return url
     except:
-            return wronglink
+          return wronglink
 
 
 def rock(url: str) -> str:
