@@ -876,8 +876,7 @@ def dlbypass(url):
         return res["msg"]
 def loan(url):
     client = cloudscraper.create_scraper(allow_brotli=False)
-    j = url.split('?token=')[-1]
-    param = j.replace('&m=1','')
+    param = url.split('?token=')[-1]
     DOMAIN = "https://go.kinemaster.cc"
     final_url = f"{DOMAIN}/{param}"
     resp = client.get(final_url)
