@@ -257,6 +257,9 @@ def is_rock_link(url: str) :
 def is_kolop_link(url: str) :
     return "kolop.icu" in url
 
+def is_ola_link(url: str) :
+    return "olamovies.wtf" in url
+
 def is_gt_link(url: str) :
     return "gtlinks.me" in url
 
