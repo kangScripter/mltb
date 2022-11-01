@@ -919,4 +919,5 @@ def ola(url) :
             if soup != "":
                    if "try2link.com" in soup or 'rocklinks.net' in soup:
                          return soup
+                   else return soup
             time.sleep(10)
