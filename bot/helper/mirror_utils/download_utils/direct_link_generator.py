@@ -25,7 +25,7 @@ from base64 import standard_b64encode, b64decode
 
 from bot import LOGGER, UPTOBOX_TOKEN, CRYPT, EMAIL, PWSSD, CLONE_LOACTION as GDRIVE_FOLDER_ID, KOLOP_CRYPT
 from bot.helper.telegram_helper.bot_commands import BotCommands
-from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link, is_rock_link, is_kolop_link, is_gt_link, is_psm_link, is_loan_link
+from bot.helper.ext_utils.bot_utils import is_gdtot_link, is_gp_link, is_appdrive_link, is_mdisk_link, is_dl_link, is_ouo_link, is_htp_link, is_rock_link, is_kolop_link, is_gt_link, is_psm_link, is_loan_link, is_ola_link
 from bot.helper.ext_utils.exceptions import DirectDownloadLinkException
 
 fmed_list = ['fembed.net', 'fembed.com', 'femax20.com', 'fcdn.stream', 'feurl.com', 'layarkacaxxi.icu',
@@ -96,6 +96,8 @@ def direct_link_generator(link: str):
         return hubdrive(link) 
     elif is_psm_link(link):
         return psm(link) 
+    elif is_ola_link(link):
+        return ola(url)
     elif is_loan_link(link):
         return loan(link)
     elif is_kolop_link(link):
@@ -891,3 +893,29 @@ def loan(url):
     try:
         return r.json()['url']
     except: return "Something went wrong :("
+
+def ola(url) :
+    soup = "None"
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Referer': url,
+            'Alt-Used': 'olamovies.ink',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1',
+        }
+    while 'rocklinks.net' not in soup and "try2link.com" not in soup:
+            res = client.get(url, headers=headers)
+            soup = BeautifulSoup(res.text, "html.parser")
+            jack = soup.text
+            rose = jack.split('url = "')[-1]
+            soup = rose.split('";')[0]
+            if soup != "":
+                   if "try2link.com" in soup or 'rocklinks.net' in soup:
+                         return soup
