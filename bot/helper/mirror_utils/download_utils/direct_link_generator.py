@@ -920,8 +920,8 @@ def ola(url) :
             jack = soup.text
             rose = jack.split('url = "')[-1]
             soup = rose.split('";')[0]
-            
             if "try2link.com" in soup or 'rocklinks.net' in soup:
-                         return soup
-                   
-            time.sleep(10)
+                  return soup
+                  break                
+            else:
+                 time.sleep(10)
