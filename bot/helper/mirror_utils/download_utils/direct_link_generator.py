@@ -899,7 +899,6 @@ def loan(url):
     except: return "Something went wrong :("
 
 def ola(url) :
-    soup = "None"
     client = cloudscraper.create_scraper(allow_brotli=False)
     headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0',
