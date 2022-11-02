@@ -880,7 +880,7 @@ def dlbypass(url):
 def loan(url):
     client = cloudscraper.create_scraper(allow_brotli=False)
     param = url.split('?token=')[-1]
-    if 'theforyou.in' in url:
+    if 'www.theforyou.in' in url:
         DOMAIN = "https://go.theforyou.in"
     else:
         DOMAIN = "https://go.kinemaster.cc"
