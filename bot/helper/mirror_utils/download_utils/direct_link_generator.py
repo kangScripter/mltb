@@ -914,7 +914,7 @@ def ola(url) :
             'Sec-Fetch-User': '?1',
         }
     
-    res = client.get(url, headers=headers)
+    res = client.get(url, headers=headers, allow_redirects=True)
     soup = BeautifulSoup(res.text, "html.parser")
     jack = soup.text
     rose = jack.split('url = "')[-1]
