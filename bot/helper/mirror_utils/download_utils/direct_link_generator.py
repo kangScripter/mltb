@@ -97,7 +97,7 @@ def direct_link_generator(link: str):
     elif is_psm_link(link):
         return psm(link) 
     elif is_ola_link(link):
-        return ola(url)
+        return ola(link)
     elif is_loan_link(link):
         return loan(link)
     elif is_kolop_link(link):
