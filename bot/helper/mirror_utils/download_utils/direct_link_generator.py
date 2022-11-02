@@ -899,13 +899,14 @@ def loan(url):
     except: return "Something went wrong :("
 
 def ola(url) :
-    client = cloudscraper.create_scraper(allow_brotli=False)
+    soup = "None"
+    client = requests.Session()
     headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5',
             'Referer': url,
-            'Alt-Used': 'olamovies.ink',
+            'Alt-Used': 'olamovies.wtf',
             'Connection': 'keep-alive',
             'Upgrade-Insecure-Requests': '1',
             'Sec-Fetch-Dest': 'document',
@@ -913,11 +914,10 @@ def ola(url) :
             'Sec-Fetch-Site': 'same-origin',
             'Sec-Fetch-User': '?1',
         }
-    
-    res = client.get(url, headers=headers, allow_redirects=True)
-    soup = BeautifulSoup(res.text, "html.parser")
-    jack = soup.text
-    rose = jack.split('url = "')[-1]
-    soup = rose.split('";')[0]
-            
-    return soup
+    while 'rocklinks.net' not in soup and "try2link.com" not in soup:
+             res = client.post(url, headers=headers, allow_redirects=True)
+             j = res.text
+             rose = j.split('url = "')[-1]
+             soup = rose.split('";')[0]       
+             if "try2link.com" in soup or 'rocklinks.net' in soup:
+                   return soup
