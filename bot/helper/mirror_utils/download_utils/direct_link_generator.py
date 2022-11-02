@@ -880,7 +880,10 @@ def dlbypass(url):
 def loan(url):
     client = cloudscraper.create_scraper(allow_brotli=False)
     param = url.split('?token=')[-1]
-    DOMAIN = "https://go.kinemaster.cc"
+    if 'theforyou.in' in url:
+        DOMAIN = "https://go.theforyou.in"
+    else:
+        DOMAIN = "https://go.kinemaster.cc"
     final_url = f"{DOMAIN}/{param}"
     resp = client.get(final_url)
     soup = BeautifulSoup(resp.content, "html.parser")    
