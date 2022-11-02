@@ -913,14 +913,11 @@ def ola(url) :
             'Sec-Fetch-Site': 'same-origin',
             'Sec-Fetch-User': '?1',
         }
-    while 'rocklinks.net' not in soup and "try2link.com" not in soup:
-            res = client.get(url, headers=headers)
-            soup = BeautifulSoup(res.text, "html.parser")
-            jack = soup.text
-            rose = jack.split('url = "')[-1]
-            soup = rose.split('";')[0]
-            if "try2link.com" in soup or 'rocklinks.net' in soup:
-                  break                
-            else:
-                 time.sleep(10)
+    
+    res = client.get(url, headers=headers)
+    soup = BeautifulSoup(res.text, "html.parser")
+    jack = soup.text
+    rose = jack.split('url = "')[-1]
+    soup = rose.split('";')[0]
+            
     return soup
