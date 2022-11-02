@@ -879,7 +879,8 @@ def dlbypass(url):
         return res["msg"]
 def loan(url):
     client = cloudscraper.create_scraper(allow_brotli=False)
-    param = url.split('?token=')[-1]
+    j = url.split('?token=')[-1]
+    param = j.replace('&m=1','')
     
     DOMAIN = "https://go.theforyou.in"
     
