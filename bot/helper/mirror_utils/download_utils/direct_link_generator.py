@@ -702,14 +702,8 @@ def ouo(url: str) -> str:
         return res["msg"]
 
 def htp(url: str) -> str:
-    client = cloudscraper.create_scraper(allow_brotli=False)
-    r = client.get(url, allow_redirects=True).text
-    j = r.split('("')[-1]
-    url = j.split('")')[0]
-    try: 
-        return url
-    except:
-          return wronglink
+    download = get(url, stream=True, allow_redirects=False) 
+    return download.headers["location"]
 
 
 def rock(url: str) -> str:
