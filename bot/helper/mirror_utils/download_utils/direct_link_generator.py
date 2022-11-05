@@ -702,7 +702,7 @@ def ouo(url: str) -> str:
         return res["msg"]
 
 def htp(url: str) -> str:
-    download = get(url, stream=True, allow_redirects=False) 
+    download = rget(url, stream=True, allow_redirects=False) 
     return download.headers["location"]
 
 
