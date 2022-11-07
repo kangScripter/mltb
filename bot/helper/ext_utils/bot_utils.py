@@ -265,7 +265,8 @@ def is_kolop_link(url: str) :
     return "kolop.icu" in url
 
 def is_ola_link(url: str) :
-    return "olamovies.cyou" in url
+    url = re_match(r'https?://olamovies.\S+', url)
+    print(url)
 
 def is_gt_link(url: str) :
     return "gtlinks.me" in url
