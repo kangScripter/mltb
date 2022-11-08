@@ -256,7 +256,7 @@ def is_htp_link(url: str) :
 
 def is_htpm_link(url: str) :
     url = re_match(r'https?://htpmovies.\S+', url)
-    print(url)
+    return bool(url)
 
 def is_rock_link(url: str) :
     return "rocklinks.net" in url or "shortingly.me" in url
@@ -266,7 +266,7 @@ def is_kolop_link(url: str) :
 
 def is_ola_link(url: str) :
     url = re_match(r'https?://olamovies.\S+', url)
-    print(url)
+    return bool(url)
 
 def is_gt_link(url: str) :
     return "gtlinks.me" in url
