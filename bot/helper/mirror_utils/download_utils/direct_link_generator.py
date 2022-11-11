@@ -920,7 +920,7 @@ def ola(url) :
              if "rocklinks.net" in soup:
                    return soup
 def try2link(url):
-    client = cloudscraper.create_scraper(allow_brotli=False)
+    client = requests.Session()
     
     url = url[:-1] if url[-1] == '/' else url
     
