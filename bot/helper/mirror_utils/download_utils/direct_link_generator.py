@@ -928,7 +928,7 @@ def try2link(url):
     r = client.get(url, params=params, headers= {'Referer': 'https://newforex.online/'})
     
     soup = BeautifulSoup(r.text, 'html.parser')
-    inputs = soup.find(id="go-link").find_all(name="input")
+    inputs = soup.find_all("input")
     data = { input.get('name'): input.get('value') for input in inputs }
     time.sleep(7)
     
