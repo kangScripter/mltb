@@ -917,7 +917,7 @@ def ola(url) :
              j = res.text
              rose = j.split('url = "')[-1]
              soup = rose.split('";')[0]       
-             if "rocklinks.net" in soup or "try2link.com" in soup::
+             if "rocklinks.net" in soup or "try2link.com" in soup:
                    return soup
 def try2link(url):
     client = create_scraper()
