@@ -912,15 +912,15 @@ def ola(url) :
             'Sec-Fetch-Site': 'same-origin',
             'Sec-Fetch-User': '?1',
         }
-    while 'rocklinks.net' not in soup:
+    while 'rocklinks.net' not in soup and "try2link.com" not in soup:
              res = client.post(url, headers=headers, allow_redirects=True)
              j = res.text
              rose = j.split('url = "')[-1]
              soup = rose.split('";')[0]       
-             if "rocklinks.net" in soup:
+             if "rocklinks.net" in soup or "try2link.com" in soup::
                    return soup
 def try2link(url):
-    client = requests.Session()
+    client = create_scraper()
     
     url = url[:-1] if url[-1] == '/' else url
     
