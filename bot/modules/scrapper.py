@@ -214,7 +214,7 @@ def scrapper(update, context):
             soup = rose.split('";')[0]
             if soup != "":
                 if "try2link.com" in soup or 'rocklinks.net' in soup or "ez4short.com" in soup:
-                    print("added", soup)
+                    #print("added", soup)
                     slist.append(soup)
                 else:
                     print(soup, "not addded")
@@ -225,15 +225,15 @@ def scrapper(update, context):
                 else:
                     count -= 1
                     print("retrying")
-            print("waiting 10 secs")
+            #print("waiting 10 secs")
             time.sleep(10)
             #print(slist)
         final = []
         for ele in slist:
            if "rocklinks.net" in ele:
-            final.append(rocklinksbyapss(ele))
+            final.append(rock(ele))
            elif "try2link.com" in ele:
-            final.append(try2link_bypass(ele))
+            final.append(try2link(ele))
            elif "ez4short.com" in ele:
             final.append(ez4(ele)) 
            else:
@@ -242,7 +242,7 @@ def scrapper(update, context):
         links = ""
         for ele in final:
             links = links + ele + "\n"
-          # print("Bypassed Links")
+        
         sendMessage(links,context.bot,update.message)
         
          
@@ -304,12 +304,6 @@ def rocklinksbyapss(url):
     try:
         return r.json()['url']
     except: return "Something went wrong :("
-
-def olamovies(url):
-    
-    print("this takes time, you might want to take a break.")
-    
-
 
 def htpmovies(link):
     client = cloudscraper.create_scraper(allow_brotli=False)
