@@ -2,13 +2,14 @@ import cloudscraper
 import requests
 import re
 from re import S
+from requests import get
 from re import match as rematch, findall, sub as resub
 from asyncio import sleep as asleep
 from time import sleep
 from urllib.parse import urlparse, unquote
 from requests import get as rget, head as rhead
 from bs4 import BeautifulSoup, NavigableString, Tag
-
+import time
 from telegram import Message
 from telegram.ext import CommandHandler
 from bot import LOGGER, dispatcher, OWNER_ID
@@ -139,6 +140,138 @@ def scrapper(update, context):
                 prsd = ""
         if prsd != "":
             sendMessage(prsd, context.bot, update.message)
+    elif "taemovies" in link:
+          client = requests.session()
+          r = client.get(link).text
+          soup = BeautifulSoup (r, "html.parser")
+          for a in soup.find_all("a"):
+             c = a.get("href")
+             if "shortingly" in c:
+                       code = c.split("/")[-1]
+                       DOMAIN = "https://go.techyjeeshan.xyz"
+                       
+                       final_url = f"{DOMAIN}/{code}"
+                       resp = client.get(final_url)
+                       soup = BeautifulSoup(resp.content, "html.parser")
+    
+                       try: inputs = soup.find(id="go-link").find_all(name="input")
+                       except: return "Incorrect Link"
+    
+                       data = { input.get('name'): input.get('value') for input in inputs }
+
+                       h = { "x-requested-with": "XMLHttpRequest" }
+    
+                       time.sleep(10)
+                       r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+                       g = r.json()['url']
+                       
+                       t = client.get(g).text
+                       soupt = BeautifulSoup(t, "html.parser")
+                       title = soupt.title
+                       gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{g}\n\n"
+                       sendMessage(gd_txt,context.bot,update.message)
+    elif "toonworld4all" in link:
+         client = requests.session()
+         r = client.get(link).text
+         soup = BeautifulSoup (r, "html.parser")
+         for a in soup.find_all("a"):
+                   c= a.get("href")
+                   if "redirect/main.php?" in c:
+                       download = get(c, stream=True, allow_redirects=False)
+                       v = download.headers["location"]
+                       DOMAIN = "https://blog.disheye.com"
+                       code = v.split("/")[-1]
+                       final_url = f"{DOMAIN}/{code}?quelle="
+                       resp = client.get(final_url)
+                       soup = BeautifulSoup(resp.content, "html.parser")
+    
+                       try: inputs = soup.find(id="go-link").find_all(name="input")
+                       except: return "Incorrect Link"
+    
+                       data = { input.get('name'): input.get('value') for input in inputs }
+
+                       h = { "x-requested-with": "XMLHttpRequest" }
+    
+                       time.sleep(10)
+                       r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+                       g = r.json()['url']
+                       if "gdtot" in g:
+                           t = client.get(g).text
+                           soupt = BeautifulSoup(t, "html.parser")
+                           title = soupt.title
+                           gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{g}\n\n"
+                           sendMessage(gd_txt,context.bot,update.message)
+    elif "olamovies" in link:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Referer': link,
+            'Alt-Used': 'olamovies.ink',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1',
+        }
+        client = cloudscraper.create_scraper()
+        res = client.get(link)
+        soup = BeautifulSoup(res.text,"html.parser")
+        soup = soup.findAll("div", class_="wp-block-button")
+   
+        outlist = []
+        for ele in soup:
+           outlist.append(ele.find("a").get("href"))
+        slist = []
+        for ele in outlist:
+          try:
+            key = ele.split("?key=")[1].split("&id=")[0].replace("%2B","+").replace("%3D","=").replace("%2F","/")
+            id = ele.split("&id=")[1]
+          except:
+            continue
+          count = 3
+          params = { 'key': key, 'id': id}
+          soup = "None"
+         # print("trying","https://olamovies.wtf/download/&key="+key+"&id="+id)
+          url = "https://olamovies.wtf/download/&key="+key+"&id="+id
+          while 'rocklinks.net' not in soup and "try2link.com" not in soup:
+            res = client.get("https://olamovies.ink/download/", params=params, headers=headers)
+            jack = res.text
+            rose = jack.split('url = "')[-1]
+            soup = rose.split('";')[0]
+            if soup != "":
+                if "try2link.com" in soup or 'rocklinks.net' in soup:
+                    print("added", soup)
+                    slist.append(soup)
+                else:
+                    print(soup, "not addded")
+            else:
+                if count == 0:
+                    print('moving on')
+                    break
+                else:
+                    count -= 1
+                    print("retrying")
+            print("waiting 10 secs")
+            time.sleep(10)
+            #print(slist)
+          final = []
+          for ele in slist:
+           if "rocklinks.net" in ele:
+            final.append(rocklinksbyapss(ele))
+           elif "try2link.com" in ele:
+            final.append(try2link_bypass(ele))
+           else:
+            print(ele)
+          #print(final)
+          links = ""
+          for ele in final:
+            links = links + ele + "\n"
+          # print("Bypassed Links")
+          sendMessage(links,context.bot,update.message)
+          return links
+         
     else:
         res = rget(link)
         soup = BeautifulSoup(res.text, 'html.parser')
@@ -147,6 +280,62 @@ def scrapper(update, context):
             links.append(hy['href'])
         for txt in links:
             sendMessage(txt, context.bot, update.message)
+
+def try2link_bypass(url):
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    
+    url = url[:-1] if url[-1] == '/' else url
+    
+    params = (('d', int(time.time()) + (60 * 4)),)
+    r = client.get(url, params=params, headers= {'Referer': 'https://newforex.online/'})
+    
+    soup = BeautifulSoup(r.text, 'html.parser')
+    inputs = soup.find(id="go-link").find_all(name="input")
+    data = { input.get('name'): input.get('value') for input in inputs }
+    time.sleep(7)
+    
+    headers = {'Host': 'try2link.com', 'X-Requested-With': 'XMLHttpRequest', 'Origin': 'https://try2link.com', 'Referer': url}
+    
+    bypassed_url = client.post('https://try2link.com/links/go', headers=headers,data=data)
+    return bypassed_url.json()["url"]
+
+
+def rocklinksbyapss(url):
+    client = cloudscraper.create_scraper(allow_brotli=False)
+    if 'rocklinks.net' in url:
+        DOMAIN = "https://blog.disheye.com"
+    else:
+        DOMAIN = "https://rocklinks.net"
+
+    url = url[:-1] if url[-1] == '/' else url
+
+    code = url.split("/")[-1]
+    if 'rocklinks.net' in url:
+        final_url = f"{DOMAIN}/{code}?quelle="
+    else:
+        final_url = f"{DOMAIN}/{code}"
+
+    resp = client.get(final_url)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    
+    try: inputs = soup.find(id="go-link").find_all(name="input")
+    except: return "Incorrect Link"
+    
+    data = { input.get('name'): input.get('value') for input in inputs }
+
+    h = { "x-requested-with": "XMLHttpRequest" }
+    
+    time.sleep(10)
+    r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
+    try:
+        return r.json()['url']
+    except: return "Something went wrong :("
+
+def olamovies(url):
+    
+    print("this takes time, you might want to take a break.")
+    
+
 
 def htpmovies(link):
     client = cloudscraper.create_scraper(allow_brotli=False)
