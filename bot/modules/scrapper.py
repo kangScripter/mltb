@@ -228,8 +228,8 @@ def scrapper(update, context):
             print("waiting 10 secs")
             time.sleep(10)
             #print(slist)
-          final = []
-          for ele in slist:
+        final = []
+        for ele in slist:
            if "rocklinks.net" in ele:
             final.append(rocklinksbyapss(ele))
            elif "try2link.com" in ele:
@@ -237,12 +237,12 @@ def scrapper(update, context):
            else:
             print(ele)
           #print(final)
-          links = ""
-          for ele in final:
+        links = ""
+        for ele in final:
             links = links + ele + "\n"
           # print("Bypassed Links")
-          sendMessage(links,context.bot,update.message)
-          return links
+        sendMessage(links,context.bot,update.message)
+        return links
          
     else:
         res = rget(link)
