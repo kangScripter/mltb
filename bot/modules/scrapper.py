@@ -16,7 +16,7 @@ from bot import LOGGER, dispatcher, OWNER_ID
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.message_utils import sendMessage, editMessage, deleteMessage
-
+from bot.helper.mirror_utils.download_utils import direct_link_generator
 def scrapper(update, context):
     user_id_ = update.message.from_user.id
     message:Message = update.effective_message
@@ -147,24 +147,8 @@ def scrapper(update, context):
           for a in soup.find_all("a"):
              c = a.get("href")
              if "shortingly" in c:
-                       code = c.split("/")[-1]
-                       DOMAIN = "https://go.techyjeeshan.xyz"
-                       
-                       final_url = f"{DOMAIN}/{code}"
-                       resp = client.get(final_url)
-                       soup = BeautifulSoup(resp.content, "html.parser")
-    
-                       try: inputs = soup.find(id="go-link").find_all(name="input")
-                       except: return "Incorrect Link"
-    
-                       data = { input.get('name'): input.get('value') for input in inputs }
-
-                       h = { "x-requested-with": "XMLHttpRequest" }
-    
-                       time.sleep(10)
-                       r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
-                       g = r.json()['url']
-                       
+                       link = c
+                       g = direct_link_generator(link) 
                        t = client.get(g).text
                        soupt = BeautifulSoup(t, "html.parser")
                        title = soupt.title
