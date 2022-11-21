@@ -213,38 +213,27 @@ def scrapper(update, context):
             rose = jack.split('url = "')[-1]
             soup = rose.split('";')[0]
             if soup != "":
-                if "try2link.com" in soup or 'rocklinks.net' in soup or "ez4short.com" in soup:
-                    #print("added", soup)
-                    slist.append(soup)
-                else:
-                    print(soup, "not addded")
-            else:
-                if count == 0:
-                    print('moving on')
-                    break
-                else:
-                    count -= 1
-                    print("retrying")
-            #print("waiting 10 secs")
-            time.sleep(10)
-            #print(slist)
-        final = []
-        for ele in slist:
-           if "rocklinks.net" in ele:
-            final.append(rock(ele))
-           elif "try2link.com" in ele:
-            final.append(try2link(ele))
-           elif "ez4short.com" in ele:
-            final.append(ez4(ele)) 
-           else:
-            print(ele)
-          #print(final)
-        links = ""
-        for ele in final:
-            links = links + ele + "\n"
-        
-        sendMessage(links,context.bot,update.message)
-        
+                if "try2link.com" in soup:
+                      final = try2link(soup)
+                      t = client.get(final).text
+                      soupt = BeautifulSoup(t, "html.parser")
+                      title = soupt.title
+                      gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
+                      print(gd_txt)  
+                elif 'rocklinks.net' in soup:
+                      final = rock(soup)
+                      t = client.get(final).text
+                      soupt = BeautifulSoup(t, "html.parser")
+                      title = soupt.title
+                      gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
+                      print(gd_txt)
+                elif "ez4short.com" in soup:
+                      final = ez4(soup)
+                      t = client.get(final).text
+                      soupt = BeautifulSoup(t, "html.parser")
+                      title = soupt.title
+                      gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
+                      print(gd_txt)
          
     else:
         res = rget(link)
@@ -255,55 +244,7 @@ def scrapper(update, context):
         for txt in links:
             sendMessage(txt, context.bot, update.message)
 
-def try2link_bypass(url):
-    client = cloudscraper.create_scraper(allow_brotli=False)
-    
-    url = url[:-1] if url[-1] == '/' else url
-    
-    params = (('d', int(time.time()) + (60 * 4)),)
-    r = client.get(url, params=params, headers= {'Referer': 'https://newforex.online/'})
-    
-    soup = BeautifulSoup(r.text, 'html.parser')
-    inputs = soup.find(id="go-link").find_all(name="input")
-    data = { input.get('name'): input.get('value') for input in inputs }
-    time.sleep(7)
-    
-    headers = {'Host': 'try2link.com', 'X-Requested-With': 'XMLHttpRequest', 'Origin': 'https://try2link.com', 'Referer': url}
-    
-    bypassed_url = client.post('https://try2link.com/links/go', headers=headers,data=data)
-    return bypassed_url.json()["url"]
-
-
-def rocklinksbyapss(url):
-    client = cloudscraper.create_scraper(allow_brotli=False)
-    if 'rocklinks.net' in url:
-        DOMAIN = "https://blog.disheye.com"
-    else:
-        DOMAIN = "https://rocklinks.net"
-
-    url = url[:-1] if url[-1] == '/' else url
-
-    code = url.split("/")[-1]
-    if 'rocklinks.net' in url:
-        final_url = f"{DOMAIN}/{code}?quelle="
-    else:
-        final_url = f"{DOMAIN}/{code}"
-
-    resp = client.get(final_url)
-    soup = BeautifulSoup(resp.content, "html.parser")
-    
-    try: inputs = soup.find(id="go-link").find_all(name="input")
-    except: return "Incorrect Link"
-    
-    data = { input.get('name'): input.get('value') for input in inputs }
-
-    h = { "x-requested-with": "XMLHttpRequest" }
-    
-    time.sleep(10)
-    r = client.post(f"{DOMAIN}/links/go", data=data, headers=h)
-    try:
-        return r.json()['url']
-    except: return "Something went wrong :("
+   
 
 def htpmovies(link):
     client = cloudscraper.create_scraper(allow_brotli=False)
