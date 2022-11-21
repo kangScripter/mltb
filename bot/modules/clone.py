@@ -56,6 +56,16 @@ def _clone(message, bot):
         except DirectDownloadLinkException as e:
             deleteMessage(bot, msg)
             return sendMessage(str(e), bot, message)
+    is_ez4 = is_ez4_link(link)
+    if is_ez4:
+        try:
+            msg = sendMessage(f"Processing: <code>{link}</code>", bot, message)
+            link = ez4(link)
+            deleteMessage(bot, msg)
+            msg = sendMessage(f"ez4_bypassed-Jack:<code>{link}</code>", bot, message) 
+        except DirectDownloadLinkException as e:
+            deleteMessage(bot, msg)
+            return sendMessage(str(e), bot, message)
     is_htp = is_htp_link(link)
     if is_htp:
         try:
