@@ -219,21 +219,21 @@ def scrapper(update, context):
                       soupt = BeautifulSoup(t, "html.parser")
                       title = soupt.title
                       gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
-                      print(gd_txt)  
+                      sendMessage(gd_txt, context.bot, update.message)  
                 elif 'rocklinks.net' in soup:
                       final = rock(soup)
                       t = client.get(final).text
                       soupt = BeautifulSoup(t, "html.parser")
                       title = soupt.title
                       gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
-                      print(gd_txt)
+                      sendMessage(gd_txt, context.bot, update.message)
                 elif "ez4short.com" in soup:
                       final = ez4(soup)
                       t = client.get(final).text
                       soupt = BeautifulSoup(t, "html.parser")
                       title = soupt.title
                       gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
-                      print(gd_txt)
+                      sendMessage(gd_txt, context.bot, update.message)
          
     else:
         res = rget(link)
