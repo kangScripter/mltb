@@ -151,7 +151,7 @@ def scrapper(update, context):
              c = a.get("href")
              if "shortingly" in c:
                        link = c
-                       g = direct_link_generator(link) 
+                       g = rock(link) 
                        t = client.get(g).text
                        soupt = BeautifulSoup(t, "html.parser")
                        title = soupt.title
