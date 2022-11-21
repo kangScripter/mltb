@@ -245,6 +245,9 @@ def is_mdisk_link(url: str):
 def is_try2link_link(url: str):
     return "try2link.com" in url
 
+def is_ez4_link(url: str):
+    return "ez4short.com" in url
+
 def is_loan_link(url: str):
     return "loan.kinemaster.cc" in url or "www.theforyou.in" in url
 
