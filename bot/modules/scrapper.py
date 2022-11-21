@@ -207,13 +207,13 @@ def scrapper(update, context):
           soup = "None"
          # print("trying","https://olamovies.wtf/download/&key="+key+"&id="+id)
           url = "https://olamovies.wtf/download/&key="+key+"&id="+id
-          while 'rocklinks.net' not in soup and "try2link.com" not in soup:
+          while 'rocklinks.net' not in soup and "try2link.com" not in soup and "ez4short.com" not in soup:
             res = client.get("https://olamovies.ink/download/", params=params, headers=headers)
             jack = res.text
             rose = jack.split('url = "')[-1]
             soup = rose.split('";')[0]
             if soup != "":
-                if "try2link.com" in soup or 'rocklinks.net' in soup:
+                if "try2link.com" in soup or 'rocklinks.net' in soup or "ez4short.com" in soup:
                     print("added", soup)
                     slist.append(soup)
                 else:
@@ -234,6 +234,8 @@ def scrapper(update, context):
             final.append(rocklinksbyapss(ele))
            elif "try2link.com" in ele:
             final.append(try2link_bypass(ele))
+           elif "ez4short.com" in ele:
+            final.append(ez4(ele)) 
            else:
             print(ele)
           #print(final)
@@ -242,7 +244,7 @@ def scrapper(update, context):
             links = links + ele + "\n"
           # print("Bypassed Links")
         sendMessage(links,context.bot,update.message)
-        return links
+        
          
     else:
         res = rget(link)
