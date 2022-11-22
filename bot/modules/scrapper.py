@@ -234,7 +234,19 @@ def scrapper(update, context):
                       title = soupt.title
                       gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{final}\n\n"
                       sendMessage(gd_txt, context.bot, update.message)
-         
+    elif "animeremux" in link:
+         client = requests.session()
+         r = client.get(url).text
+         soup = BeautifulSoup (r, "html.parser")
+         for a in soup.find_all("a"):
+             c = a.get("href") 
+             if "appdrive.in" in c:
+                      x = c.split("url=")[-1]
+                      t = client.get(x).text
+                      soupt = BeautifulSoup(t, "html.parser")
+                      title = soupt.title
+                      gd_txt = f"{(title.text).replace('GDToT | ' , '')}\n{x}\n\n"
+                      sendMessage(gd_txt, context.bot, update.message)
     else:
         res = rget(link)
         soup = BeautifulSoup(res.text, 'html.parser')
