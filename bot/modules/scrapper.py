@@ -240,7 +240,7 @@ def scrapper(update, context):
          soup = BeautifulSoup (r, "html.parser")
          for a in soup.find_all("a"):
              c = a.get("href") 
-             if "urlshortx.com" c:
+             if "urlshortx.com" in c:
                       x = c.split("url=")[-1]
                       t = client.get(x).text
                       soupt = BeautifulSoup(t, "html.parser")
