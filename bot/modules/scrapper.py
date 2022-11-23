@@ -240,7 +240,7 @@ def scrapper(update, context):
          soup = BeautifulSoup (r, "html.parser")
          for a in soup.find_all("a"):
              c = a.get("href") 
-             if "appdrive.in" in c:
+             if "appdrive.in" or "drive.google.com" c:
                       x = c.split("url=")[-1]
                       t = client.get(x).text
                       soupt = BeautifulSoup(t, "html.parser")
