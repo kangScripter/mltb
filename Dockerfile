@@ -1,4 +1,4 @@
-FROM 412314/mltb:heroku
+FROM codewithweeb/weebzone:stable
 
 #FROM anasty17/mltb:latest
 
